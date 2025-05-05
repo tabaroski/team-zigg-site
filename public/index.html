@@ -11,21 +11,21 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1 id="nome-clan">Carregando nome do clã...</h1>
-    <p id="descricao-clan"></p>
-    <p><strong>Link do grupo:</strong> <a href="https://chat.whatsapp.com/J6saiZA3SEZ2OOmB9BbE6C" target="_blank">Entrar no WhatsApp</a></p>
-  </div>
+    <div class="container">
+        <h1 id="nome-clan">Carregando nome do clã...</h1>
+        <p id="descricao-clan"></p>
+        <p><strong>Link do grupo:</strong> <a href="https://chat.whatsapp.com/J6saiZA3SEZ2OOmB9BbE6C" target="_blank">Entrar no WhatsApp</a></p>
+    </div>
 
-  <script>
-    fetch('/api/getClan')
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("nome-clan").innerText = data.name;
-        document.getElementById("descricao-clan").innerText = data.description;
-        console.log(data);
-      })
-      .catch(err => console.error("Erro ao buscar dados do clã:", err));
-  </script>
+    <script>
+        fetch('https://team-zigg-api.onrender.com') // use o link real do seu backend
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("nome-clan").innerText = data.name;
+                document.getElementById("descricao-clan").innerText = data.description;
+            })
+            .catch(err => console.error("Erro ao buscar dados:", err));
+    </script>
+
 </body>
 </html>
