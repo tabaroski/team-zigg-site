@@ -18,7 +18,7 @@
     </div>
 
     <script>
-        fetch('https://team-zigg-api.onrender.com') // use o link real do seu backend
+        fetch('https://team-zigg-api.onrender.com/clan') // use o link real do seu backend
             .then(res => res.json())
             .then(data => {
                 document.getElementById("nome-clan").innerText = data.name;
