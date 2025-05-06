@@ -85,69 +85,36 @@
     <div class="content">
         <h1>Resumo Geral</h1>
 
-        <div class="groupbox" id="estrelas-box">
-            <h3>Estrelas por Jogador</h3>
-            <ul id="estrelas-list"></ul>
-        </div>
-
-        <div class="groupbox" id="faltantes-box">
-            <h3>Jogadores que não atacaram</h3>
-            <ul id="faltantes-list"></ul>
+        <div class="groupbox" id="resumo-box">
+            <h3>Grupos de Guerra da Liga</h3>
+            <ul id="war-tags-list"></ul>
         </div>
     </div>
 
     <script>
-    fetch('https://team-zigg-api.onrender.com/warleague')
-      .then(res => res.json())
-      .then(data => {
-        if (!data || !data.members || !data.attacks) {
-          console.error('Dados da guerra não encontrados');
-          return;
-        }
+        fetch('https://team-zigg-api.onrender.com/leaguegroup')
+            .then(res => res.json())
+            .then(data => {
+                const warTags = [];
+                if (data.rounds && Array.isArray(data.rounds)) {
+                    data.rounds.forEach((round, index) => {
+                        round.warTags.forEach(tag => {
+                            if (tag !== "#0") warTags.push(tag);
+                        });
+                    });
+                }
 
-        const estrelasPorJogador = {};
-        const ataquesFeitos = {};
+                // Salva localmente para uso futuro nas páginas /guerraX.html
+                localStorage.setItem("warTags", JSON.stringify(warTags));
 
-        data.attacks.forEach(ataque => {
-          const nome = ataque.attackerTag;
-          estrelasPorJogador[nome] = (estrelasPorJogador[nome] || 0) + ataque.stars;
-          ataquesFeitos[nome] = (ataquesFeitos[nome] || 0) + 1;
-        });
-
-        const membros = data.members;
-        const listaEstrelas = [];
-        const listaFaltantes = [];
-
-        membros.forEach(member => {
-          const nome = member.name;
-          const tag = member.tag;
-          const estrelas = estrelasPorJogador[tag] || 0;
-          const ataques = ataquesFeitos[tag] || 0;
-
-          listaEstrelas.push({ nome, estrelas });
-
-          if (ataques === 0) {
-            listaFaltantes.push(nome);
-          }
-        });
-
-        listaEstrelas.sort((a, b) => b.estrelas - a.estrelas);
-
-        const estrelasList = document.getElementById("estrelas-list");
-        listaEstrelas.forEach(jogador => {
-          const li = document.createElement("li");
-          li.textContent = `${jogador.nome} - ${jogador.estrelas} estrelas`;
-          estrelasList.appendChild(li);
-        });
-
-        const faltantesList = document.getElementById("faltantes-list");
-        listaFaltantes.forEach(nome => {
-          const li = document.createElement("li");
-          li.textContent = nome;
-          faltantesList.appendChild(li);
-        });
-      })
-      .catch(err => console.error('Erro ao carregar dados da guerra:', err));
+                const list = document.getElementById("war-tags-list");
+                warTags.forEach((tag, i) => {
+                    const li = document.createElement("li");
+                    li.textContent = `Guerra ${i + 1}: ${tag}`;
+                    list.appendChild(li);
+                });
+            })
+            .catch(err => console.error("Erro ao buscar dados da liga de guerra:", err));
     </script>
 </body>
 </html>

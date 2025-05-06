@@ -1,62 +1,122 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Estatísticas Guerra 1 - Liga de Guerra</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background-color: #111;
-      color: #fff;
-      margin: 0;
-      display: flex;
-      height: 100vh;
-    }
-    .sidebar {
-      width: 200px;
-      background-color: #000;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .sidebar h2 {
-      color: #0ff;
-      margin-top: 0;
-    }
-    .sidebar a {
-      color: #0ff;
-      text-decoration: none;
-      display: block;
-      margin: 10px 0;
-    }
-    .dropdown-content {
-      margin-left: 10px;
-    }
-    .content {
-      flex: 1;
-      padding: 2rem;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Estatísticas Guerra 1</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #111;
+            color: #fff;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #000;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+            .sidebar h2 {
+                color: #0ff;
+                margin-top: 0;
+            }
+
+            .sidebar a {
+                color: #0ff;
+                text-decoration: none;
+                display: block;
+                margin: 10px 0;
+            }
+
+        .dropdown-content {
+            margin-left: 10px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .groupbox {
+            background-color: #222;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+            .groupbox h3 {
+                margin-top: 0;
+                color: #0ff;
+            }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding: 4px 0;
+        }
+    </style>
 </head>
 <body>
-  <div class="sidebar">
-    <h2>TEAM ZIGG</h2>
-    <a href="/">Início</a>
-    <a href="/membros.html">Membros</a>
-    <div class="dropdown-content">
-      <a href="/resumo.html">Resumo Geral</a>
-      <a href="/guerra1.html">Estatísticas Guerra 1</a>
-      <a href="/guerra2.html">Estatísticas Guerra 2</a>
-      <a href="/guerra3.html">Estatísticas Guerra 3</a>
-      <a href="/guerra4.html">Estatísticas Guerra 4</a>
-      <a href="/guerra5.html">Estatísticas Guerra 5</a>
-      <a href="/guerra6.html">Estatísticas Guerra 6</a>
-      <a href="/guerra7.html">Estatísticas Guerra 7</a>
-      <a href="/guerra8.html">Estatísticas Guerra 8</a>
+    <div class="sidebar">
+        <h2>TEAM ZIGG</h2>
+        <a href="/">Início</a>
+        <a href="/membros.html">Membros</a>
+        <div class="dropdown-content">
+            <a href="/resumo.html">Resumo Geral</a>
+            <a href="/guerra1.html">Estatísticas Guerra 1</a>
+            <a href="/guerra2.html">Estatísticas Guerra 2</a>
+            <a href="/guerra3.html">Estatísticas Guerra 3</a>
+            <a href="/guerra4.html">Estatísticas Guerra 4</a>
+            <a href="/guerra5.html">Estatísticas Guerra 5</a>
+            <a href="/guerra6.html">Estatísticas Guerra 6</a>
+            <a href="/guerra7.html">Estatísticas Guerra 7</a>
+            <a href="/guerra8.html">Estatísticas Guerra 8</a>
+        </div>
     </div>
-  </div>
-  <div class="content">
-    <h1>Estatísticas Guerra 1</h1>
-    <p>Conteúdo em desenvolvimento...</p>
-  </div>
+
+    <div class="content">
+        <h1>Estatísticas - Guerra 1</h1>
+        <div class="groupbox" id="detalhes-guerra">
+            <h3>Resumo da Guerra</h3>
+            <ul id="resumo-guerra"></ul>
+        </div>
+    </div>
+
+    <script>
+    const warTags = JSON.parse(localStorage.getItem("warTags"));
+    const warTag = warTags && warTags[0]; // guerra 1
+
+    if (warTag) {
+      fetch(`https://team-zigg-api.onrender.com/leaguewar/${encodeURIComponent(warTag)}`)
+        .then(res => res.json())
+        .then(data => {
+          const resumo = document.getElementById("resumo-guerra");
+          const clan = data.clan;
+          const opponent = data.opponent;
+
+          const info = [
+            `Clã: ${clan.name} - Estrelas: ${clan.stars} - % Destruição: ${clan.destructionPercentage.toFixed(1)}%`,
+            `Oponente: ${opponent.name} - Estrelas: ${opponent.stars} - % Destruição: ${opponent.destructionPercentage.toFixed(1)}%`
+          ];
+
+          info.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = item;
+            resumo.appendChild(li);
+          });
+        })
+        .catch(err => console.error("Erro ao buscar detalhes da guerra:", err));
+    } else {
+      document.getElementById("resumo-guerra").innerHTML = "<li>WarTag não disponível. Acesse primeiro a página de Resumo Geral.</li>";
+    }
+    </script>
 </body>
 </html>
