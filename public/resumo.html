@@ -47,22 +47,25 @@
         const data = await res.json();
         const rounds = data.rounds || [];
         const myWars = [];
-        for (let i = 0; i < rounds.length && i < 7; i++) 
-        {
+        const warStats = {};
+
+        for (let i = 0; i < rounds.length && i < 7; i++) {
           const warTags = rounds[i].warTags.filter(tag => tag !== "#0");
-          for (let tag of warTags) 
-          {
+          for (let tag of warTags) {
             const cleanTag = tag.replace("#", "");
             const warRes = await fetch("https://team-zigg-api.onrender.com/leaguewar/:" + cleanTag);
             const warData = await warRes.json();
-
             if (warData.clan?.tag === CLAN_TAG || warData.opponent?.tag === CLAN_TAG) {
               myWars.push({ round: i + 1, warTag: cleanTag });
+              warStats[cleanTag] = warData;
               break;
             }
           }
         }
+
         localStorage.setItem("myWarList", JSON.stringify(myWars));
+        localStorage.setItem("myWarStats", JSON.stringify(warStats));
+
         const list = document.getElementById("war-tags-list");
         myWars.forEach(war => {
           const li = document.createElement("li");
