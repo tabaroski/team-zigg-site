@@ -7,8 +7,8 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Open guerra8.html",
-            "file": "c:\\Users\\gabriel\\Downloads\\team-zigg-site\\public\\guerra8.html"
+            "name": "Open resumo.html",
+            "file": "c:\\Users\\gabriel\\Downloads\\team-zigg-site\\public\\resumo.html"
         }
     ]
 }

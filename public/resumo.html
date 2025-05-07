@@ -55,9 +55,7 @@
             const cleanTag = tag.replace("#", "");
             const warRes = await fetch("https://team-zigg-api.onrender.com/leaguewar/:" + cleanTag);
             const warData = await warRes.json();
-            console.log("Comparando tags:", warData.clan?.tag, warData.opponent?.tag, "com", CLAN_TAG);
             if (warData.clan?.tag === CLAN_TAG || warData.opponent?.tag === CLAN_TAG) {
-              console.log("Igualdade direta:", warData.clan?.tag === CLAN_TAG, warData.opponent?.tag === CLAN_TAG);
               myWars.push({ round: i + 1, warTag: cleanTag });
               warStats[cleanTag] = warData;
               break;
