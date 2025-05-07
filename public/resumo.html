@@ -47,13 +47,17 @@
         const data = await res.json();
         const rounds = data.rounds || [];
         const myWars = [];
-        for (let i = 0; i < rounds.length && i < 7; i++) {
+        for (let i = 0; i < rounds.length && i < 7; i++) 
+        {
           const warTags = rounds[i].warTags.filter(tag => tag !== "#0");
-          for (const tag of warTags) {
-            const warRes = await fetch("https://team-zigg-api.onrender.com/leaguewar/" + encodeURIComponent(tag));
+          for (let tag of warTags) 
+          {
+            const cleanTag = tag.replace("#", "");
+            const warRes = await fetch("https://team-zigg-api.onrender.com/leaguewar/:" + cleanTag);
             const warData = await warRes.json();
+
             if (warData.clan?.tag === CLAN_TAG || warData.opponent?.tag === CLAN_TAG) {
-              myWars.push({ round: i + 1, warTag: tag });
+              myWars.push({ round: i + 1, warTag: cleanTag });
               break;
             }
           }
